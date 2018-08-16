@@ -10,6 +10,8 @@
 
 @interface ViewController ()
 
+
+
 @end
 
 @implementation ViewController
@@ -52,7 +54,15 @@
     }]; // 5 MAIN
     
     [dataTask resume]; // 6 MAIN
-}
+    
+//    // METHOD TO USE WHEN RELOADING URL INFORMATION
+//    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//        // This will run on the main queue
+//    }];
+    
+    
+    
+} // END VIEW DID LOAD
 
 // 1 MAIN  Create a new NSURL object from the github url string.
 //2 MAIN Create a new NSURLRequest object using the URL object. Use this object to make configurations specific to the URL. For example, specifying if this is a GET or POST request, or how we should cache data.
@@ -72,10 +82,22 @@
 // 4 If we get to this point, we have the JSON data back from our request, so let's use it. When we made this request in our browser, we saw something similar to this:
 
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView
+                 cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
+    
+    cell.textLabel.text = @"Amir";
+    
+    return cell;
 }
 
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 10;
+    
+    // pu the repos in an array and retun itd count
+}
 
 @end
