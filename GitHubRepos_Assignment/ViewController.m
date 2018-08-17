@@ -40,7 +40,6 @@
     
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         // COMPLETION HANDLER
-        
         if (error) { // 1
             // Handle the error
             NSLog(@"error: %@", error.localizedDescription);
@@ -59,11 +58,11 @@
         // If we reach this point, we have successfully retrieved the JSON from the API
         for (NSDictionary *repo in repos) { // 4
             Repo *repoTempObject = [[Repo alloc] init];
-            repoTempObject = repo[@"name"];
+            repoTempObject.gitRepoNames = repo[@"name"];
 //            NSString *repoName = repo[@"name"];
 //            NSLog(@"repo: %@", repoName);
             
-            [self.reproNames addObject:repoTempObject]; // doesn't work
+            [self.reproNames addObject:repoTempObject]; 
         }
         
 //        NSLog(@"TEST: %@", self.reproNames);
@@ -112,15 +111,17 @@
 // 4 If we get to this point, we have the JSON data back from our request, so let's use it. When we made this request in our browser, we saw something similar to this:
 
 
-
-
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView
                  cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
-    
 //    cell.textLabel.text = @"Amir";
-    cell.textLabel.text = self.reproNames[indexPath.item];
+//    cell.textLabel.text = self.reproNames[indexPath.item];
+    Repo *tempObj = [[Repo alloc] init];
+    tempObj = self.reproNames[indexPath.item];
+    
+    cell.textLabel.text = tempObj.gitRepoNames;
+
     
     return cell;
 }
