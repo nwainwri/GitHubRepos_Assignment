@@ -13,7 +13,6 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *repoTableView;
 
-
 @property (strong, nonatomic) NSMutableArray *reproNames;
 
 @end
@@ -22,15 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    
-    
     self.reproNames = [NSMutableArray new];
-    
-//    self.reproNames = @[@"THIS HERE"].mutableCopy;
-    
-    // Do any additional setup after loading the view, typically from a nib.
     
     NSURL *url = [NSURL URLWithString:@"https://api.github.com/users/zenFish00/repos"]; // 1 MAIN
     NSURLRequest *urlRequest = [[NSURLRequest alloc] initWithURL:url]; // 2 MAIN
@@ -45,51 +36,38 @@
             NSLog(@"error: %@", error.localizedDescription);
             return;
         }
-        
         NSError *jsonError = nil;
         NSArray *repos = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError]; // 2
-        
         if (jsonError) { // 3
             // Handle the error
             NSLog(@"jsonError: %@", jsonError.localizedDescription);
             return;
         }
-        
         // If we reach this point, we have successfully retrieved the JSON from the API
         for (NSDictionary *repo in repos) { // 4
             Repo *repoTempObject = [[Repo alloc] init];
             repoTempObject.gitRepoNames = repo[@"name"];
-//            NSString *repoName = repo[@"name"];
-//            NSLog(@"repo: %@", repoName);
+            //            NSString *repoName = repo[@"name"];
+            //            NSLog(@"repo: %@", repoName);
             
             [self.reproNames addObject:repoTempObject];
         }
         
-//        NSLog(@"TEST: %@", self.reproNames);
+        //        NSLog(@"TEST: %@", self.reproNames);
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self.repoTableView reloadData];
         }];
         
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.repoTableView reloadData];
-//        });
+        //        dispatch_async(dispatch_get_main_queue(), ^{
+        //            [self.repoTableView reloadData];
+        //        });
         
-//        [self.repoTableView reloadData];
-
+        //        [self.repoTableView reloadData];
+        
     }]; // 5 MAIN
     
     [dataTask resume]; // 6 MAIN
-    
-//    [self.repoTableView reloadData];
-    
-    // METHOD TO USE WHEN RELOADING URL INFORMATION
-//    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-//                    [self.repoTableView reloadData];
-//
-//    }];
-    
-    
     
 } // END VIEW DID LOAD
 
@@ -110,19 +88,15 @@
 // 3 If there was an error getting JSON from the NSData, like if the server actually returned XML to us, then we want to handle it here.
 // 4 If we get to this point, we have the JSON data back from our request, so let's use it. When we made this request in our browser, we saw something similar to this:
 
-
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView
                  cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
-//    cell.textLabel.text = @"Amir";
-//    cell.textLabel.text = self.reproNames[indexPath.item];
+    //    cell.textLabel.text = @"Amir";
+    //    cell.textLabel.text = self.reproNames[indexPath.item];
     Repo *tempObj = [[Repo alloc] init];
     tempObj = self.reproNames[indexPath.item];
-    
     cell.textLabel.text = tempObj.gitRepoNames;
-
-    
     return cell;
 }
 
