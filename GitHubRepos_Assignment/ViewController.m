@@ -7,10 +7,14 @@
 //
 
 #import "ViewController.h"
+#import "Repo.h"
 
 @interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UITableView *repoTableView;
 
+
+@property (strong, nonatomic) NSMutableArray *reproNames;
 
 @end
 
@@ -18,6 +22,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    
+    
+    self.reproNames = [NSMutableArray new];
+    
+//    self.reproNames = @[@"THIS HERE"].mutableCopy;
+    
     // Do any additional setup after loading the view, typically from a nib.
     
     NSURL *url = [NSURL URLWithString:@"https://api.github.com/users/zenFish00/repos"]; // 1 MAIN
@@ -46,18 +58,36 @@
         
         // If we reach this point, we have successfully retrieved the JSON from the API
         for (NSDictionary *repo in repos) { // 4
+            Repo *repoTempObject = [[Repo alloc] init];
+            repoTempObject = repo[@"name"];
+//            NSString *repoName = repo[@"name"];
+//            NSLog(@"repo: %@", repoName);
             
-            NSString *repoName = repo[@"name"];
-            NSLog(@"repo: %@", repoName);
+            [self.reproNames addObject:repoTempObject]; // doesn't work
         }
         
+//        NSLog(@"TEST: %@", self.reproNames);
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.repoTableView reloadData];
+        }];
+        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.repoTableView reloadData];
+//        });
+        
+//        [self.repoTableView reloadData];
+
     }]; // 5 MAIN
     
     [dataTask resume]; // 6 MAIN
     
-//    // METHOD TO USE WHEN RELOADING URL INFORMATION
+//    [self.repoTableView reloadData];
+    
+    // METHOD TO USE WHEN RELOADING URL INFORMATION
 //    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-//        // This will run on the main queue
+//                    [self.repoTableView reloadData];
+//
 //    }];
     
     
@@ -89,15 +119,14 @@
 {
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
     
-    cell.textLabel.text = @"Amir";
+//    cell.textLabel.text = @"Amir";
+    cell.textLabel.text = self.reproNames[indexPath.item];
     
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
-    
-    // pu the repos in an array and retun itd count
+    return self.reproNames.count;
 }
 
 @end
